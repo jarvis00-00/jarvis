@@ -1,0 +1,55 @@
+import re
+from os import environ
+
+# Pattern to match valid IDs
+id_pattern = re.compile(r'^-?\d+$')  # Modified to allow negative IDs (e.g., for channels)
+
+# Helper function for enabling/disabling features
+def is_enabled(value, default=False):
+    return value.lower() in ["true", "yes", "1", "enable"] if value else default
+
+# Bot Information
+SESSION = environ.get('SESSION', 'Jarvis')
+API_ID = int(environ.get('API_ID', '28880293'))
+API_HASH = environ.get('API_HASH', 'd6ea1280f2dd3c8703d8c001389ca630')
+BOT_TOKEN = environ.get('BOT_TOKEN', '')
+
+# Port Configuration
+PORT = int(environ.get('PORT', 8080))
+
+# Bot Settings
+CACHE_TIME = int(environ.get('CACHE_TIME', 300))
+USE_CAPTION_FILTER = is_enabled(environ.get('USE_CAPTION_FILTER', 'True'))
+PICS = environ.get('PICS', 'https://example.com/default_image.jpg').split(',')
+
+# Admins, Channels, and Users
+ADMINS = [int(admin) if id_pattern.match(admin) else admin for admin in environ.get('ADMINS', '916045958').split()]
+CHANNELS = [int(ch) if id_pattern.match(ch) else ch for ch in environ.get('CHANNELS', '-1002492948611').split()]
+AUTH_USERS = [int(user) if id_pattern.match(user) else user for user in environ.get('AUTH_USERS', '6188248890').split()]
+LOG_CHANNEL = int(environ.get('LOG_CHANNEL', '0'))  # Default to 0 if not provided
+
+# MongoDB Configuration
+DATABASE_URI = environ.get('DATABASE_URI', 'mongodb+srv://Damon00:Jarvis1234@cluster0.bjs5n.mongodb.net/?retryWrites=true&w=majority')
+DATABASE_NAME = environ.get('DATABASE_NAME', 'Damon')
+COLLECTION_NAME = environ.get('COLLECTION_NAME', 'Jarvis')
+
+# URL Shortener Configuration
+URL_SHORTENER_ENABLED = is_enabled(environ.get('URL_SHORTENER_ENABLED', 'False'))
+SHORTENER_API = environ.get('SHORTENER_API', '')
+
+# File Settings
+CUSTOM_FILE_CAPTION = environ.get('CUSTOM_FILE_CAPTION', 'File uploaded by @backup_movie_file')
+BATCH_FILE_CAPTION = environ.get('BATCH_FILE_CAPTION', 'Batch files uploaded by @backup_movie_file')
+
+# Logging
+LOG_STR = f"""
+Bot Session: {SESSION}
+Admins: {ADMINS}
+Channels: {CHANNELS}
+Log Channel: {LOG_CHANNEL}
+Database: {DATABASE_NAME} (Collection: {COLLECTION_NAME})
+URL Shortener Enabled: {URL_SHORTENER_ENABLED}
+Custom File Caption: {CUSTOM_FILE_CAPTION}
+"""
+
+print(LOG_STR
